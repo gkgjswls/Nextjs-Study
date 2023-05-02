@@ -8,8 +8,8 @@ const EventSearch = (props) =>{
 
     const submitHandler = (e) =>{
         e.preventDefault();
-        const selectedYear = yearInput.current;
-        const selectedMonth = monthInput.current;
+        const selectedYear = yearInput.current.value;
+        const selectedMonth = monthInput.current.value;
 
         props.onSearch(selectedYear,selectedMonth)
 
