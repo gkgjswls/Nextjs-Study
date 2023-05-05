@@ -2,20 +2,23 @@ import { useRouter } from "next/router";
 import EventSummary from '../../components/event-detail/event-summary'
 import EventLogistics from '../../components/event-detail/event-logistics'
 import EventContent from '../../components/event-detail/event-content'
-import { getAllEvents, getEventById } from '../../helpers/api-util';
+import { getEventById,getFeaturedEvents } from '../../helpers/api-util';
 const EventDetail = (props) =>{
-
+    const event = props.selectedEvent
+    if(!event){
+        return <p>Loading...</p>
+    }
 
     return(
     <>
-        <EventSummary title={props.selectedEvent.title}/>
+        <EventSummary title={event.title}/>
         <EventLogistics 
-            date={props.selectedEvent.date} 
-            address={props.selectedEvent.location} 
-            image={props.selectedEvent.image} 
-            imageAlt={props.selectedEvent.title}/>
+            date={event.date} 
+            address={event.location} 
+            image={event.image} 
+            imageAlt={event.title}/>
         <EventContent>
-            <p>{props.selectedEvent.description}</p>
+            <p>{event.description}</p>
         </EventContent>
     </>  
     )
@@ -33,18 +36,19 @@ export async function getStaticProps(context) {
     return {
         props: {
             selectedEvent: event,
-        }
+        },
+        revalidate: 30,
     }
 }
 export async function getStaticPaths(context){
 
-    const allEvents = await getAllEvents();
-    const eventPaths = allEvents.map(event=>{return {params: {eventId: event.id}}})
+    const featuredEvent = await getFeaturedEvents();
+    const eventPaths = featuredEvent.map(event=>{return {params: {eventId: event.id}}})
 
     return {
 
         paths: eventPaths,
-        fallback: false
+        fallback: true
     }
 
 
