@@ -6,10 +6,14 @@ import ErrorAlert from '../../components/ui/error-alert'
 import { getFilteredEvents } from '../../helpers/api-util';
 import Head from 'next/head';
 const FilteredEventsPage = (props) =>{
-
+    const headerData = (<Head>
+        <title> Filtered Events</title>
+        <meta name='description' content={`All events for ${props.year}/${props.month}`}/>
+    </Head>)
     if(props.hasError){
             return (
                 <>
+                {headerData}
                 <ErrorAlert>
                     <p>Invalid filter Please adjust your values!</p>
                 </ErrorAlert>
@@ -25,6 +29,7 @@ const FilteredEventsPage = (props) =>{
     if(!filteredEvents || filteredEvents.length === 0){
         return (
         <>
+        {headerData}
         <ErrorAlert>
             <p>No events found for the filter!</p>
         </ErrorAlert>
@@ -34,13 +39,11 @@ const FilteredEventsPage = (props) =>{
         </>
         )
     }
+
     const date = new Date(props.year,props.month - 1)
     return(
         <div>
-            <Head>
-                <title> Filtered Events</title>
-                <meta name='description' content={`All events for ${props.year}/${props.month}`}/>
-            </Head>
+            {headerData}
             <ResultsTitle date={date}/>
             <EventList items={filteredEvents}/>
         </div>
