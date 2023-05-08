@@ -4,6 +4,7 @@ import ResultsTitle from "../../components/events/results-title";
 import Button from "../../components/ui/button";
 import ErrorAlert from '../../components/ui/error-alert'
 import { getFilteredEvents } from '../../helpers/api-util';
+import Head from 'next/head';
 const FilteredEventsPage = (props) =>{
 
     if(props.hasError){
@@ -36,6 +37,10 @@ const FilteredEventsPage = (props) =>{
     const date = new Date(props.year,props.month - 1)
     return(
         <div>
+            <Head>
+                <title> Filtered Events</title>
+                <meta name='description' content={`All events for ${props.year}/${props.month}`}/>
+            </Head>
             <ResultsTitle date={date}/>
             <EventList items={filteredEvents}/>
         </div>
