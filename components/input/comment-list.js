@@ -1,9 +1,12 @@
+import { useRouter } from 'next/router';
 import classes from './comment-list.module.css';
-
-function CommentList() {
+import { useEffect, useState } from 'react';
+function CommentList(props) {
+  console.log(props.item)
+  const coment = props.item
   return (
     <ul className={classes.comments}>
-      {/* Render list of comments - fetched from API */}
+      {coment &&coment.map(item=><li>{item.text}<div>By <address>{item.name}</address></div></li>)}
       <li>
         <p>My comment is amazing!</p>
         <div>
