@@ -1,35 +1,34 @@
-import { useRouter } from 'next/router';
-import EventList from '../../components/events/eventList'
-import EventSearch from "../../components/events/events-search";
-import { getAllEvents } from '../../helpers/api-util';
-const Event= (props) =>{
-    const router = useRouter()
-    const events = props.allEvents;
-    const findEventHandler = (year,month)=>{
-        const fullPath = `/events/${year}/${month}`
-        router.push(fullPath);
-    }
-    return(
-        <div>
-            <EventSearch onSearch={findEventHandler} />
-            <EventList
-                items ={events}
-            ></EventList>
-        </div>
-    )
+import Head from 'next/head';
 
+import { getFeaturedEvents } from '../../helpers/api-util';
+import EventList from '../../components/events/eventList';
+import NewsletterRegistration from '../../components/input/newsletter-registration';
+
+function HomePage(props) {
+  return (
+    <div>
+      <Head>
+        <title>NextJS Events</title>
+        <meta
+          name='description'
+          content='Find a lot of great events that allow you to evolve...'
+        />
+      </Head>
+      <NewsletterRegistration />
+      <EventList items={props.events} />
+    </div>
+  );
 }
 
-export default Event;
+export async function getStaticProps() {
+  const featuredEvents = await getFeaturedEvents();
 
-export async function getStaticProps(context){
-
-    const allEvents = await getAllEvents()
-
-
-    return {
-        props: {
-            allEvents: allEvents
-        }
-    }
+  return {
+    props: {
+      events: featuredEvents,
+    },
+    revalidate: 1800,
+  };
 }
+
+export default HomePage;
