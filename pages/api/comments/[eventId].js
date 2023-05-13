@@ -27,8 +27,8 @@ export default function handler(req, res) {
     //받기
     const dummyList = [
       {id: 'c1', name: '하헌진', text: 'hi'},
-      {id: 'c2', name: '함민우', text: 'hi'},
-      {id: 'c3', name: '유안서', text: 'hi'}
+      {id: 'c2', name: '가스', text: 'hi'},
+      {id: 'c3', name: '개', text: 'hi'}
     ]
 
     return res.status(201).json({data: dummyList})
