@@ -1,6 +1,10 @@
+import { MongoClient } from "mongodb";
 
-export default function handler(req, res) {
+
+export default async function handler(req, res) {
   const eventId = req.query.eventId;
+  const client = await MongoClient.connect('mongodb+srv://gkgjswls842:1234@cluster0.ht9pwmc.mongodb.net/events?retryWrites=true&w=majority')
+
   if(req.method ==='POST'){
     //추가
     const {email, name, text} = req.body;
@@ -14,26 +18,28 @@ export default function handler(req, res) {
       
     }
     const newComment = {
-      id:  new Date().toISOString(),
       email,
       name,
       text,
+      eventId
     }
     
-    
-    return res.status(201).json({message: 'Added comment', comment: newComment})
+    const db  = client.db();
+    const result= await db.collection('comments').insertOne({newComment})
+    console.log(result)
+;   newComment.id = result.insertedId;
+
+    res.status(201).json({message: 'Added comment', comment: newComment})
   }
   if(req.method === 'GET'){
     //받기
-    const dummyList = [
-      {id: 'c1', name: '김 풍', text: 'hi'},
-      {id: 'c2', name: '주호민', text: 'hi'},
-      {id: 'c3', name: '침착맨', text: 'hi'}
-    ]
+    const db = client.db();
+    const document = await db.collection('comments').find().sort({_id: -1}).toArray()
 
-    return res.status(201).json({data: dummyList})
+
+    return res.status(201).json({data: document})
 
   }
+
+  client.close()
 }
-
-
