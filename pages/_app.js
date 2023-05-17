@@ -6,10 +6,12 @@ function MyApp({ Component, pageProps }) {
   return(
     
     <NotificationContextProvider>
-        <Layout>
+      {
+       ()=><Layout>
             <Head><meta name='desc' content='globalHead'/></Head>
             <Component {...pageProps} />
         </Layout>
+      } 
     
     </NotificationContextProvider>
     
